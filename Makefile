@@ -13,6 +13,13 @@ help:
 TORCH_TARGET = libtorch-macos-arm64-$(PYTORCH_VERSION).tgz
 TORCH_BUILD = $(PWD)/build/torch
 TORCH_INSTALL = $(PWD)/install/torch
+
+CMAKE_OPTIONS =
+CMAKE_OPTIONS += -DCMAKE_OSX_ARCHITECTURES=$(OSX_ARCHITECTURE)
+CMAKE_OPTIONS += -DUSE_MKL=OFF -DUSE_MKLDNN=OFF -DUSE_ITT=OFF
+CMAKE_OPTIONS += -DUSE_QNNPACK=OFF
+
+
 .PHONY: torch
 torch: $(TORCH_TARGET)
 
@@ -30,7 +37,7 @@ $(TORCH_INSTALL):
 .PHONY: build_torch
 build_torch: $(TORCH_BUILD) $(TORCH_INSTALL) checkout_torch
 	cd $< && \
-		cmake -DCMAKE_INSTALL_PREFIX=$(TORCH_INSTALL) -DCMAKE_OSX_ARCHITECTURE=$(OSX_ARCHITECTURE) ../../pytorch && \
+		cmake -DCMAKE_INSTALL_PREFIX=$(TORCH_INSTALL) $(CMAKE_OPTIONS) ../../pytorch && \
 		make install -j 6
 
 $(TORCH_TARGET): build_torch
