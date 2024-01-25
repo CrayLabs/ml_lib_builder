@@ -28,8 +28,8 @@ PYTORCH_VERSION=v2.0.1
 OSX_ARCHITECTURE=arm64
 
 TORCH_TARGET = libtorch-macos-arm64-$(PYTORCH_VERSION).tgz
-TORCH_BUILD = $(PWD)/build/torch
-TORCH_INSTALL = $(PWD)/install/torch
+TORCH_BUILD = $(PWD)/build/libtorch
+TORCH_INSTALL = $(PWD)/install/libtorch
 
 TORCH_CMAKE_OPTIONS =
 TORCH_CMAKE_OPTIONS += -DCMAKE_OSX_ARCHITECTURES=$(OSX_ARCHITECTURE)
@@ -54,7 +54,9 @@ torch: $(TORCH_TARGET)
 
 .PHONY: checkout_torch
 checkout_torch:
-	cd pytorch && git checkout $(PYTORCH_VERSION) && git submodule sync --recursive
+	cd pytorch && git checkout $(PYTORCH_VERSION) && \
+		git submodule foreach --recursive git reset --hard && \
+		git submodule update --init --recursive
 
 $(TORCH_BUILD):
 	mkdir -p $@
@@ -69,7 +71,7 @@ build_torch: $(TORCH_BUILD) $(TORCH_INSTALL) checkout_torch
 		make install -j 4
 
 $(TORCH_TARGET): build_torch
-	cd install && tar -czf ../$@ torch
+	cd install && tar -czf ../$@ libtorch
 
 .PHONY: clean_torch
 clean_torch:
