@@ -29,4 +29,4 @@ cd ml_lib_builder
 make torch
 ```
 
-This will result in a zipped
+This will result in a zipped tarfile torc

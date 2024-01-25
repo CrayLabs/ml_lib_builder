@@ -27,7 +27,7 @@
 PYTORCH_VERSION=v2.0.1
 OSX_ARCHITECTURE=arm64
 
-TORCH_TARGET = libtorch-macos-arm64-$(PYTORCH_VERSION).tgz
+TORCH_TARGET = libtorch-macos-$(OSX_ARCHITECTURE)-$(PYTORCH_VERSION).tgz
 TORCH_BUILD = $(PWD)/build/libtorch
 TORCH_INSTALL = $(PWD)/install/libtorch
 
@@ -36,32 +36,38 @@ TORCH_CMAKE_OPTIONS += -DCMAKE_OSX_ARCHITECTURES=$(OSX_ARCHITECTURE)
 TORCH_CMAKE_OPTIONS += -DUSE_MKL=OFF -DUSE_MKLDNN=OFF -DUSE_ITT=OFF
 TORCH_CMAKE_OPTIONS += -DUSE_QNNPACK=OFF -DUSE_KINETO=OFF
 
-.PHONY: clean
-clean: clean_torch
-
 .PHONY: help
 help:
 	@grep "^# help\:" Makefile | grep -v grep | sed 's/\# help\: //' | sed 's/\# help\://'
 
+ifneq ($(shell uname), Darwin)
+	$(error This tool requires Mac OSX)
+endif
+
+# help:
 # help: ----Description----
 # help: Builds ML backends for use on arm64
 # help:
+# help: ----Meta targets----
+# help: clean						-- Cleans all build and install directories
+.PHONY: clean
+clean: clean_torch
+
+# help:
 # help: ----Build Targets----
 # help: torch						-- Builds libtorch
-
+# help:
 .PHONY: torch
 torch: $(TORCH_TARGET)
 
+# Checkout a specific version of Torch and update all of the torch submodules
 .PHONY: checkout_torch
 checkout_torch:
 	cd pytorch && git checkout $(PYTORCH_VERSION) && \
 		git submodule foreach --recursive git reset --hard && \
 		git submodule update --init --recursive
 
-$(TORCH_BUILD):
-	mkdir -p $@
-
-$(TORCH_INSTALL):
+$(TORCH_BUILD) $(TORCH_INSTALL):
 	mkdir -p $@
 
 .PHONY: build_torch
@@ -75,4 +81,4 @@ $(TORCH_TARGET): build_torch
 
 .PHONY: clean_torch
 clean_torch:
-	rm -rf $(TORCH_BUILD) $(TORCH_TARGET)
+ 	rm -rf $(TORCH_BUILD) $(TORCH_TARGET) $(TORCH_INSTALL)
