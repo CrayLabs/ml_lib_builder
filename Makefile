@@ -81,8 +81,9 @@ build_torch: $(TORCH_BUILD) $(TORCH_INSTALL) checkout_torch
 		make install -j 4
 
 $(TORCH_TARGET): build_torch
-	cd install && tar -czf ../$@ libtorch
+	cd install && zip -r ../$@ libtorch
 
 .PHONY: clean_torch
 clean_torch:
- 	rm -rf $(TORCH_BUILD) $(TORCH_TARGET) $(TORCH_INSTALL)
+	rm -rf $(TORCH_BUILD) $(TORCH_TARGET) $(TORCH_INSTALL)
+
