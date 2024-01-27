@@ -24,7 +24,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PYTORCH_VERSION=v2.0.1
+PYTORCH_VERSION=2.0.1
 OSX_ARCHITECTURE=arm64
 
 TORCH_TARGET = libtorch-macos-$(OSX_ARCHITECTURE)-$(PYTORCH_VERSION).tgz
@@ -67,7 +67,7 @@ torch: $(TORCH_TARGET)
 # Checkout a specific version of Torch and update all of the torch submodules
 .PHONY: checkout_torch
 checkout_torch:
-	cd pytorch && git checkout $(PYTORCH_VERSION) && \
+	cd pytorch && git checkout v$(PYTORCH_VERSION) && \
 		git submodule foreach --recursive git reset --hard && \
 		git submodule update --init --recursive
 
@@ -81,8 +81,9 @@ build_torch: $(TORCH_BUILD) $(TORCH_INSTALL) checkout_torch
 		make install -j 4
 
 $(TORCH_TARGET): build_torch
-	cd install && tar -czf ../$@ libtorch
+	cd install && zip -r ../$@ libtorch
 
 .PHONY: clean_torch
 clean_torch:
- 	rm -rf $(TORCH_BUILD) $(TORCH_TARGET) $(TORCH_INSTALL)
+	rm -rf $(TORCH_BUILD) $(TORCH_TARGET) $(TORCH_INSTALL)
+
