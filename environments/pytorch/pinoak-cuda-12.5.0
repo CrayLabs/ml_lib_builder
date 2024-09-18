@@ -1,5 +1,5 @@
 module purge
 
-module load PrgEnv-gnu cudatoolkit/12.5.0 cudnn/cuda-12/9.3.0.75 gcc/11.2.0 ninja libffi libsqlite3 cray-python
+module load PrgEnv-gnu cudatoolkit/12.5.0 cudnn/cuda-12/9.3.0.75 gcc/11.2.0 ninja cray-python
 export TORCH_CUDA_ARCH_LIST="5.0 5.1 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0"
 export CC=gcc CXX=g++ FC=gfortran

@@ -1,0 +1,10 @@
+module purge
+
+export ROCM_VERSION=6.1.2
+
+module load PrgEnv-gnu rocm/$ROCM_VERSION libffi libsqlite3 cmake cray-python
+
+# Following come from hipconfig, not all variables set by ROCm module
+export ROCM_PATH=/global/opt/rocm-$ROCM_VERSION
+
+

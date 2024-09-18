@@ -78,7 +78,6 @@ build_torch: $(TORCH_ARCHIVE)
 
 .PHONY: clean_torch
 clean_torch:
-	rm -rf $(TORCH_BUILD_DIR) $(TORCH_ARCHIVE) $(TORCH_INSTALL_DIR)
 	cd pytorch && git clean -fdx && git restore .
 	cd pytorch/third_party/kineto && git restore .
 
@@ -94,7 +93,8 @@ clean_tensorflow:
 	rm -rf $(TF_INSTALL_DIR)
 	cd tensorflow && \
 		bazel clean --expunge_async && \
-		git restore .
+		git restore . && \
+		git reset --hard
 
 .PHONY: clean_onnxruntime
 clean_onnxruntime:

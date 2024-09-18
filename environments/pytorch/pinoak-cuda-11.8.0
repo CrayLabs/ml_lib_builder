@@ -1,4 +1,4 @@
 module purge
 
-module load PrgEnv-gnu cudatoolkit/11.8.0 cudnn/8.9.7.29 gcc/11.2.0 ninja libffi libsqlite3 cray-python
+module load PrgEnv-gnu cudatoolkit/11.8.0 cudnn/8.9.7.29 gcc/11.2.0 ninja cray-python
 export CC=gcc CXX=g++ FC=gfortran
